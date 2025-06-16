@@ -1,0 +1,23 @@
+[below was generated using the create_Word_Doc.py Python program]
+
+https://learn.microsoft.com/en-us/office/vba/api/overview/
+Office VBA Reference
+* 09/12/2021
+Office Visual Basic for Applications (VBA) is an event-driven programming language that enables you to extend Office applications.
+VBA programming in Office
+This reference is for experienced Office users who want to learn about VBA and who want some insight into how programming can help them to customize Office.
+The Office suite of applications has a full set of features. There are many different ways to author, format, and manipulate documents, email, databases, forms, spreadsheets, and presentations.
+See also
+* Office VBA Object library reference
+https://learn.microsoft.com/en-us/office/vba/api/word.selection
+Selection object (Word)
+* 01/21/2022
+Represents the current selection in a window or pane. A selection represents either a selected (or highlighted) area in the document, or it represents the insertion point if nothing in the document is selected. There can be only one Selection object per document window pane, and only one Selection object in the entire application can be active.
+Remarks
+Use the Selection property to return the Selection object. If no object qualifier is used with the Selection property, Microsoft Word returns the selection from the active pane of the active document window. The following example copies the current selection from the active document.
+VBCopy
+Selection.Copy
+The following example deletes the selection from the third document in the Documents collection. The document does not have to be active to access its current selection.
+VBCopy
+Documents(3).ActiveWindow.Selection.Cut
+
