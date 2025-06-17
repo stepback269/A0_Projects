@@ -1,11 +1,19 @@
-#-- Comments start with a hash sign   version 6/15(b)/2025
+#-- Comments start with a hash sign   version 6/17(a)/2025
 # I didn't intend for this Py code to be my first Git-tracked one, but things were such a mess
 #  ... that I didn't know what I had in this file
-# It turns out to be a test py script for creating a Word Document using the pywin32 MODULE
+# It turned out to be a test py script for creating a demo Word Document using the pywin32 MODULE
 # which then sends VBA commands to the Word doc to drive it with "wd.Selection.<method>" object calls
 # The original code was included in WiseOwl Lesson "17b" which is much more complex
 # WiseOwl:  Python Part 17b - VBA using pywin32
 # https://www.youtube.com/watch?v=PiHm9k0gd1M&t=1339s&pp=ygVEQWxleCBweSBzY3JpcHQgZm9yIGNyZWF0aW5nIGEgV29yZCBEb2N1bWVudCB1c2luZyB0aGUgcHl3aW4zMiBNT0RVTEU%3D
+
+# Proposed upgrade:
+# Have the user annotate the generated Word Doc by giving it a title (Use the Document.SaveAs() method)
+# Have the user optionally annotate each copied section (eg copied from the web) with a user input note
+# Allow the user to optionally separate copied sections with blank lines and/or lines filled with marker
+
+# See in general the Word VBA Reference guide at https://learn.microsoft.com/en-us/office/vba/api/overview/word
+# See also Document methods, See also Selection methods under above guide heading
 
 # More research:
 #   PyCharm Version Control (VCS):
@@ -36,7 +44,7 @@ wd.Visible= True
 # Next we add a new "Document" to the Work Space
 wd.Documents.Add()
 
-# Here is where we have a while loop for copy/paste operations
+
 # ---------- Colored escape definitions -------------
 esc_white: str = '\033[97m'  #<-- this escape sequence will switch print()s to output white letters
 esc_yellow: str = '\033[93m'  #<-- this escape sequence should switch print()s to output yellow letters
@@ -44,12 +52,21 @@ esc_red: str = '\033[91m'  #<-- this escape sequence is for red. See:
 # https://jakob-bagterp.github.io/colorist-for-python/ansi-escape-codes/standard-16-colors/-
 # -#foreground-text-and-background-colors  Note background colors can also be set
 
+save_as_title = input(f'Please type in a {esc_yellow}file name{esc_white} for this Word Doc\nhere: ')
+# ^^^ above will be inserted at end of pastes when we do the Doc.SaveAs() command
+
+# Here is where we have a while loop for copy/paste operations
 halted = False
 i = 0
 while not halted:
     i += 1
+    print(f'Please pick a delimiter for between copy / paste operations (space or * or = are OK')
+    junk0 = input(f'Enter one delimiter char here:__')
+    junk0n = junk0 * 50 #<--replicate the delimiter
+    wd.Selection.TypeText(junk0n)   #<-- paste the replicated delim into the word Doc
+
     print('Keep copying contents into Clipboard and press just Enter to paste. Type xx to terminate.')
-    junk1 = input(f'({i}) Copy {esc_yellow} new content {esc_white} to Clipboard and hit <Enter> with Cursor placed here -->({i})__')
+    junk1 = input(f'({i}) Copy {esc_yellow}new content{esc_white} to Clipboard and hit <Enter> with Cursor placed here -->({i})__')
     new_content = pyperclip.paste()  # <--- pull the content string from the clipboard
     if junk1 == 'xx' or junk1 == 'XX': #<-- here we test for the 'xx' terminating text
         halted = True
